@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block "content" %}
+  <style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+  }
+  main {
+    /*border: 1px solid #ccc;*/
+    box-shadow: 0 11px 100px -40px #000;
+    display: inline-block;
+    margin: 40px auto;
+    padding: 40px;
+    text-align: left;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+    font-size: 21pt;
+    margin: 0 0 0.5em;
+    font-weight: normal;
+  }
+  h1 .week {
+    font-size: 0.8em;
+  }
+
+  /* Styles */
+
+  .timeslots h2 {
+    color: #343;
+    font-size: 10pt;
+    font-weight: normal;
+    margin: 0;
+    padding: 0 0.5em 0 0;
+    text-align: right;
+    width: 70px;
+  }
+  .timeslots h2, .slot, .slots {
+    display: inline-block;
+  }
+  .slot {
+    margin: 1px;
+  }
+  .slot label {
+    background: rgb(252, 252, 252);
+    color: rgb(130, 130, 130);
+    aborder-radius: 5px;
+    display: inline-block;
+    width: 60px;
+    border: 1px solid rgb(237, 237, 237);
+    padding: 6px 6px;
+    text-align: center;
+  }
+  .slot input:checked + label {
+    background-color: rgb(177, 255, 166);
+    border-color: rgb(106, 223, 93);
+    aborder-color: rgb(176, 223, 153);
+    box-shadow: inset -3px -2px 15px -5px rgb(40, 120, 10);
+    color: rgb(40, 120, 10);
+  }
+  .slot input {
+    position: absolute;
+    visibility: hidden;
+  }
+  </style>
+
+  <h1>{{ week.template.title }} <span class=week>{{ week.year }}-{{ week.week_no }}</span></h1>
+
+  {% spaceless %}
+  <form class=timeslots method=post>
+    {% regroup slots by time.date as slots_by_date %}
+    {% for day in slots_by_date %}
+      <div class=day>
+        <h2>{{ day.grouper|date:"l" }}</h2>
+        <div class=slots>
+        {% for slot in day.list %}
+          <div class=slot>
+            <input name=slot-{{ slot.pk }} id=id_slot-{{ slot.pk }}
+              type=checkbox
+              {% if has_bid %}disabled{% endif %}
+              {% if not has_bid or user in slot.bidders.all %}
+                checked
+              {% endif %}>
+            <label for=id_slot-{{ slot.pk }}>{{ slot.time|date:"H:i" }}</label>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+    {% if has_bid %}
+      <p>Your bids for this week has been registered.
+    {% else %}
+      <input type=submit>
+    {% endif %}
+  </form>
+  {% endspaceless %}
+{% endblock %}

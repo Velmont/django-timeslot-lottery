@@ -1,0 +1,5 @@
+Slot for {{ template }} {{ week }}
+
+You got:
+
+    {{ slot }}

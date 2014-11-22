@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block "content" %}
+  <h1>{{ template.title }}</h1>
+
+  {% if template.current_week %}
+    <div class=current-week>
+      CURRENT WEEK {{ template.current_week }}
+    </div>
+  {% elif request.user.is_staff %}
+    <a href="{% url 'timeslot_lottery:week_detail' 2014 01 %}">Create current week</a>
+  {% endif %}
+
+  {% for week in template.weeks.all %}
+    <div>
+      {{ week }}
+    </div>
+  {% endfor %}
+
+{% endblock %}
