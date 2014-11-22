@@ -1,0 +1,7 @@
+*.py[co]
+*.sw[pon]
+.DS_Store
+*.db
+*.egg-info
+example/db.sqlite3
+env/
